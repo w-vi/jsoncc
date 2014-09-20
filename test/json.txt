@@ -1,0 +1,28 @@
+{"user": 
+ {
+     "activeDays": 7, "domain": "ios.geewa.com", "gcash": 0,
+     "language": "en", "accessTime":null, "userID":
+     "1000@8633763475", 
+     "location": {
+                  "latitude": 49.75, 
+                  "alpha3": "CZE", 
+                  "longitude": 15.5, 
+                  "country": "Czech Republic"
+                 },      
+     "state" : ["xxx", "yyyy", "zzzz"],  
+     "stateno" : [1, 2, 3],  
+     "rank": 2, "nick": "gclsample2", 
+     "state": {
+         "status": 3
+     },
+     "activeTime": "#[0-9]+", "avatar":
+     "http://gc001.geewa.com/flash/club/last/avatar/defaultAvatars/boy.png?a=9z8k&v=6",
+     "type": 2, "createTime": 1355082540000, "identity":
+     "geewa:gclsample2", "gpoints":"#[0-9]+" 
+ },
+ "userServer": 
+ [{"url": "http://test.gews.cz/channel/gateway.ashx", "ping": 0, "events": {"url": "http://test.gews.cz/channel/event.ashx", "cometID": "", "timeout": 20000}}],
+ "sessionID":"", "firstLogin": false, "serverUrls": 
+ {"trace": "http://trace.gews.cz/", "res": "http://cdn.static.geewa.net/g/sample/res/", "ping": "tcp://88.86.109.85:9330/", "trophies": "http://cdn.static.geewa.net/g/sample/res/trophies/", "flags": "http://cdn.static.geewa.net/i/flags/", "file": "http://avatar.static.geewa.net/file/", "report": "http://report.gews.cz/"}
+ , "id": "gclsample2", "loginID":123456
+}
