@@ -145,3 +145,7 @@ void jsn_free_trace_desc(trace_desc_t *s);
 ### Example
 
 See [test](test/) directory for working example.
+
+## Acknowledgment
+
+This tool is based on modified Eli Bendersky's [pycparser](https://github.com/eliben/pycparser) and json parsing on [frozen parser](https://github.com/cesanta/frozen).
