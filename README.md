@@ -24,18 +24,18 @@ generated, all you need to do is to include the `.h` in your source
 where appropriate and add the `.c`, `frozen.c` and `frozen.h`
 files (find them in the [test](test/) directory) to your build.
 
-`jsoncc/jsoncc.py -i source.h -o output.c`
+`jsoncc/jsoncc.py -i source.h -o output`
 
 Creates `output.h` and `output.c` files from `source.h`
 
-For help see `jsoncc.py -h`
+For help see `jsoncc/jsoncc.py -h`
 
 Or you can import the JsonCC class from the jsoncc package.
 
 ```python
     from jsoncc.jsoncc import JsonCC
 
-    jsoncc = JsonCC(src=code, filename=args.input, output=args.output, debug=debug, parse_debug=args.astdebug)
+    jsoncc = JsonCC(src=code, filename=args.input[0], output=args.output[0], debug=True/False, parse_debug=True/false)
             
     jsoncc.gen()
 ```
