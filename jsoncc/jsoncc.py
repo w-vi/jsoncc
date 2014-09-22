@@ -33,12 +33,11 @@ class JsonVisitor(c_ast.NodeVisitor):
             if node.mode == 'decode' or node.mode == 'both':
                 logging.debug("Generate decoding of struct %s typedef'd to %s"
                               % (s.name, t.name))
-                self.gen.decodeTypedefStruct(t.name, s)
+                self.gen.decodeTypedefStruct(t.name, s, node.flags)
             if node.mode == 'encode' or node.mode == 'both':
-                toarray = True if 'array' in node.flags else False
                 logging.debug("Generate encoding of struct %s typedef'd to %s"
                               % (s.name, t.name))
-                self.gen.encodeTypedefStruct(t.name, s, toarray)
+                self.gen.encodeTypedefStruct(t.name, s, node.flags)
         else:
             raise RuntimeError(
                 "Only structs are supported ATM no support for %s"

@@ -9,6 +9,9 @@
 
 int main(int argc, char *argv[])
 {
+    int status = JSN_OK;
+    char **ptr = NULL;
+    trace_desc_t *trc = (trace_desc_t *)calloc(1, sizeof(trace_desc_t));
     char *source = NULL;
     FILE *fp = fopen("json.txt", "r");
     if (fp != NULL) {
@@ -48,31 +51,26 @@ int main(int argc, char *argv[])
         
     }
 
-    struct json_token *arr;
-    struct json_token *tok;
-    int status = JSN_OK;
-    
-    trace_desc_t *trc = (trace_desc_t *)calloc(1, sizeof(trace_desc_t));
-
     printf("%s\n",source);
 
     status = jsn_decode_trace_desc(trc, source, strlen(source));
     printf("Status %d\n", status);
 
-//    if (JSN_OK == status)
+    if (JSN_OK == status)
     {
+        ptr = trc->states;
+
         printf("user.activeDays = %d\n", trc->activedays);
         printf("user.domain = %s\n", trc->domain);
         printf("gateway url = %s\n", trc->gatewayurl);
         printf("events url = %s\n", trc->eventurl);
         printf("long %lf, lat %f\n", trc->lon, trc->lat);
         printf("user.states =");
-        for(char *p = *trc->states; p != NULL; p = *(++trc->states))
+        for(char *p = *ptr; p != NULL; p = *(++ptr))
         {
             printf(" %s", p);
         }
         printf("\n");
-
         printf("user.statenos =");
         for(int i = 0; i < trc->statenos_count_; ++i)
         {
@@ -80,9 +78,10 @@ int main(int argc, char *argv[])
         }
         printf("\n");
     }
-    
-    free(trc);
 
+    jsn_free_trace_desc(trc);
+    
+    
     trace_get_desc_rq_t tgr = {"asdcvl", 1, 356, "{\"foo\": 123}"};
     char *buf = NULL;
     size_t len = 0;
@@ -98,6 +97,6 @@ int main(int argc, char *argv[])
         printf(" %d", buf[i]);
     }
     printf("\n");
-    
+
     return  status;
 }

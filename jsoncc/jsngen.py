@@ -108,22 +108,23 @@ class JsonCCGen(object):
         for a in self._asts.values():
             a.show()
 
-    def _addFuncDecl(self, name, op='decode', array=False):
+    def _addFuncDecl(self, name, op='decode', free=False):
         nm = name[:-2] if name.endswith("_t") else name
         
         if op == 'decode':
+            freefunc = None
             declname = "jsn_decode_%s" %(nm)
             funcdef = copy.deepcopy(self._asts['decode_func'])
             funcdef.decl.name = declname
             funcdef.decl.type.type.declname = declname
             funcdef.decl.type.args.params[0].type.type.type.names[0] = name
             self.h.append(funcdef.decl)
-
-            freefunc = copy.deepcopy(self._asts['free_func'])
-            freefunc.decl.name = "jsn_free_%s" %(nm)
-            freefunc.decl.type.type.declname = "jsn_free_%s" %(nm)
-            freefunc.decl.type.args.params[0].type.type.type.names[0] = name
-            self.h.append(freefunc.decl)
+            if free:
+                freefunc = copy.deepcopy(self._asts['free_func'])
+                freefunc.decl.name = "jsn_free_%s" %(nm)
+                freefunc.decl.type.type.declname = "jsn_free_%s" %(nm)
+                freefunc.decl.type.args.params[0].type.type.type.names[0] = name
+                self.h.append(freefunc.decl)
 
         elif op == 'encode':
             freefunc = None
@@ -285,9 +286,10 @@ class JsonCCGen(object):
             func.body.block_items += tok.block_items
 
 
-    def decodeTypedefStruct(self, name, s):
+    def decodeTypedefStruct(self, name, s, options=[]):
         assert(isinstance(s, Struct))
-        fundef, freefunc = self._addFuncDecl(name)
+        free = True if 'free' in options else False
+        fundef, freefunc = self._addFuncDecl(name, free=free)
         for d in s.decls:
             if d.json == []:
                 continue
@@ -304,27 +306,26 @@ class JsonCCGen(object):
         
         self.c.append(fundef)
 
-        frbody = freefunc.body.block_items[0].iftrue
-        frbody.block_items = []
-        for d in s.decls:
-            if d.json == []:
-                continue
-            if isinstance(d.type, PtrDecl):
-                if isinstance(d.type.type, PtrDecl):
-                    ff = copy.deepcopy(self._asts['free_str_arr'].body.block_items[0])
-                    ff.cond.field.name =  d.type.type.type.declname
-                    ff.iftrue.block_items[0].init.field.name = d.type.type.type.declname
-                    ff.iftrue.block_items[2].args.exprs[0].field.name = d.type.type.type.declname
-                else:
-                    ff = copy.deepcopy(self._asts['free_item'].body.block_items[0])
-                    ff.cond.field.name = d.type.type.declname
-                    ff.iftrue.args.exprs[0].field.name = d.type.type.declname
+        if free:
+            frbody = freefunc.body.block_items[0].iftrue
+            frbody.block_items = []
+            for d in s.decls:
+                if d.json == []:
+                    continue
+                if isinstance(d.type, PtrDecl):
+                    if isinstance(d.type.type, PtrDecl):
+                        ff = copy.deepcopy(self._asts['free_str_arr'].body.block_items[0])
+                        ff.cond.field.name =  d.type.type.type.declname
+                        ff.iftrue.block_items[0].init.field.name = d.type.type.type.declname
+                        ff.iftrue.block_items[2].args.exprs[0].field.name = d.type.type.type.declname
+                    else:
+                        ff = copy.deepcopy(self._asts['free_item'].body.block_items[0])
+                        ff.cond.field.name = d.type.type.declname
+                        ff.iftrue.args.exprs[0].field.name = d.type.type.declname
 
-                frbody.block_items.append(ff)
+                    frbody.block_items.append(ff)
 
-        frbody.block_items.append(FuncCall(ID('free'), ID('s')))
-
-        self.c.append(freefunc)
+            self.c.append(freefunc)
 
 
     def _encodeTypeDecl(self, func, td, json, array=False):
@@ -394,12 +395,15 @@ class JsonCCGen(object):
             func.append(val)
 
             
-    def encodeTypedefStruct(self, name, s, array=False):
+    def encodeTypedefStruct(self, name, s, options=[]):
+        array = True if 'array' in options else False
+
         if 'realloc' not in self._funcset:
             self._addUtilFunc('realloc', self._asts['realloc'])
-        fundef, freefunc = self._addFuncDecl(name, op='encode', array=array)
+        fundef, freefunc = self._addFuncDecl(name, op='encode')
         body = fundef.body.block_items[6]
         body.block_items = []
+
         if array :
             fundef.body.block_items[5].rvalue.value = "'['"
 

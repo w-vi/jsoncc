@@ -12,7 +12,7 @@ typedef struct trace_get_desc_rq_s
 } trace_get_desc_rq_t ;
 
 
-//+json:decode
+//+json:decode:free
 typedef struct trace_desc_s
 {
     unsigned short int activedays; //+json:user.activeDays

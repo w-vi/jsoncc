@@ -112,15 +112,17 @@ Generated function to decode into the  struct is in following format
 `jsn_error_t jsn_decode_(typedef name - _t or _s)(typedef name
 *s, char * json_data, size_t json_len)`.
 
-To make it easier to use, there are also clenup functions generated so
-there is no need to track what is malloc'ed and what not, just call
-the corresponding cleanup function named
-`void jsn_destroy_(typedef name - _t or _s)(typedef name *s)`.
+To make it easier to use, there is a option `free` to generate clenup
+functions for decoded structs so there is no need to track what is
+malloc'ed and what not, just call the corresponding cleanup function
+named `void jsn_free_(typedef name - _t or _s)(typedef name *s)`.
+It frees any memory allocated in the decode function not the struct
+itself. If you don't want any of it just omit the the option.
 
 #### Example
 
 ```c
-//+json:decode
+//+json:decode:free
 typedef struct trace_desc_s
 {
     int activedays; //+json:user.activeDays
