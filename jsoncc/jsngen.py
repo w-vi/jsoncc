@@ -1,11 +1,10 @@
-#!/usr/bin/env python
 #-----------------------------------------------------------------
-# jsoncc: runtime.py
+# jsoncc: jsngen.py
 #
-# json en/decoding related C code templates and code generator
+# json en/decoding related C code generator
 #
 # Copyright (C) 2014, wvi
-# License: BSD
+# License: GPLv3
 #-----------------------------------------------------------------
 import sys
 import logging
@@ -179,10 +178,10 @@ class JsonCCGen(object):
     def _tok_fncall(self, json):
         if 'optional' in json:
             tok = copy.deepcopy(self._asts['find_opt_token'].body) 
-            fncall = tok.block_items[1].iftrue.block_items[0].cond.expr.right.rvalue
+            fncall = tok.block_items[1].iftrue.block_items[0].cond.right.rvalue
         else:
             tok = copy.deepcopy(self._asts['find_token'].body)
-            fncall = tok.block_items[2].cond.expr.right.rvalue
+            fncall = tok.block_items[2].cond.right.rvalue
 
         return tok, fncall
 

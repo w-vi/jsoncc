@@ -1,3 +1,11 @@
+#-----------------------------------------------------------------
+# jsoncc: templates.py
+#
+# json en/decoding related C code templates
+#
+# Copyright (C) 2014, wvi
+# License: GPLv3
+#-----------------------------------------------------------------
 warning_comment = "/*\n * IMPORATNT \n * This file has been generated with jsoncc from %s, DO NOT modify directly.\n */"
 file_prelude = '#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n#include <stddef.h>\n#include "frozen.h"\n\n\
 typedef struct jsn_buf_s \n\
@@ -59,7 +67,7 @@ get_array = "jsn_error_t get_array_int(const struct json_token *toks, int index,
         *count = tok->num_desc; \
         for (int i = index; i < index + tok->num_desc; ++i) \
         { \
-            if(! JSN_OK == (status = get_int(&toks[i + 1], &ptr[i - index]))) goto end; \
+            if(JSN_OK != (status = get_int(&toks[i + 1], &ptr[i - index]))) goto end; \
         } \
     } else {  \
         return JSN_EINVAL; \
@@ -83,10 +91,10 @@ free_str_arr = "void xxx (){ if (s->xxx) { char **ptr = s->xxx; for(char *p = *p
 encode_func="jsn_error_t jsn_encode_name(int *s, char **b, size_t *len){ jsn_error_t status = JSN_OK; size_t p1 = 1; size_t p2 = 0; jsn_buf_t buf = {NULL, 0}; if (JSN_OK != (status = buf_realloc(&buf, JSN_ALLOC_CHUNK))) return status; buf.base[0]='{'; {} buf.base[p1-1]='}'; *b = buf.base; *len = p1; return status;}"
 
 find_opt_token = 'void x(){tok = find_json_token(arr, "path"); if (tok) { \
-if (!(JSN_OK == (status = func()))) goto end;}}'
+if (JSN_OK != (status = func())) goto end;}}'
 
 find_token = 'void x(){tok = find_json_token(arr, "path");if (!tok) \
-{status = JSN_ENOTFOUND;  goto end; } if (!(JSN_OK == (status = func()))) goto end;}'
+{status = JSN_ENOTFOUND;  goto end; } if (JSN_OK != (status = func())) goto end;}'
 
 emit_bool = 'void x(){p2 += (s->XXX) ? snprintf(&buf.base[p1], buf.len, "true,") : snprintf(&buf.base[p1], buf.len, "false,");if (p2 >= (buf.len - p1)) { if (JSN_OK != (status = buf_realloc(&buf, p2 + JSN_ALLOC_CHUNK))) return status; p1 += (s->XXX) ? snprintf(&buf.base[p1], buf.len, "true,") : snprintf(&buf.base[p1], buf.len, "false,");} else { p1 += p2; } p2 = 0;}'
 
