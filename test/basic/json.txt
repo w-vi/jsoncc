@@ -1,0 +1,29 @@
+{"user": 
+  {
+     "activeDays": 7, "domain": "example.net",
+     "language": "en", "accessTime":null, 
+     "userID":"8633763475", 
+     "location": {
+                  "latitude": 49.75, 
+                  "longitude": 15.5, 
+                  "country": "Some Republic"
+                 },      
+     "state" : ["xxx", "yyyy", "zzzz"],  
+     "stateno" : [1, 2, 3],  
+     "rank": 2, 
+     "nick": "sample", 
+     "state": {
+         "status": 3
+     },
+     "avatar":"http://avatar.example.com/defaultAvatars/boy.png?a=9z8k&v=6",
+     "type": 2, 
+     "createTime": 1355082540000, 
+     "identity": "sample" 
+     },
+ "userServer": 
+ [{"url": "http://example.net/channel/gateway", "ping": 0, "events": {"url": "http://example.net/channel/event", "ID": "", "timeout": 20000}}],
+ "sessionID":"", 
+ "firstLogin": false,  
+ "id": "sample", 
+ "loginID":123456
+}

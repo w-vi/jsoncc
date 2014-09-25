@@ -16,11 +16,9 @@ $(EXE): $(OBJ)
 	$(CC) $(CFLAGS) $(INC) $< -o $@
 
 json_dec.c:
-	python ../jsoncc/jsoncc.py -i json_struct.h  -o json_dec
+	python ../../jsoncc/jsoncc.py -i json_struct.h  -o json_dec
 
 clean:
-	rm -f json_dec.*
-	rm -f *.o
-	rm -f $(EXE)
+	rm -f json_dec.* *.o $(EXE) *.py
 
 .PHONY: all clean
