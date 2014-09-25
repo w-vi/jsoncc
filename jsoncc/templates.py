@@ -38,7 +38,7 @@ get_str_array = "jsn_error_t get_str_array(const struct json_token *toks, int in
         *val = ptr; \
         for (int i = index; i < index + tok->num_desc; ++i) \
         { \
-            if(! JSN_OK == (status = get_str(&toks[i + 1], ptr))) goto end; \
+            if(JSN_OK != (status = get_str(&toks[i + 1], ptr))) goto end; \
             ++ptr; \
         } \
     } else {  \
@@ -46,7 +46,7 @@ get_str_array = "jsn_error_t get_str_array(const struct json_token *toks, int in
     } \
 end: \
     if (status) { \
-        ptr = *val;
+        ptr = *val;\
         for(char *p = *ptr; p != NULL; p = *(++ptr)) \
             free(p); \
         free(*val); \
