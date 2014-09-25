@@ -5,7 +5,7 @@
 # Main jsoncc module, code generator and parser
 #
 # Copyright (C) 2014, wvi
-# License: BSD
+# License: GPLv3
 #-----------------------------------------------------------------
 
 __all__ = ['JsonCC', 'slurp_file']
@@ -47,7 +47,9 @@ class JsonCC(object):
     """
     Main Jsoncc object 
     """
-    def __init__(self, src, filename,  output=None, debug=False, parse_debug=0):
+    def __init__(self, src, filename,  
+                 output=None, debug=False, 
+                 parse_debug=0, code_debug=False):
         """
         """
         self.code = src
@@ -71,7 +73,8 @@ class JsonCC(object):
                                   yacctab='yacctab', 
                                   yacc_debug=False)
 
-        self.ast = parser.parse(self.code, filename=self.filename, debuglevel=self.parse_dbg_lvl)
+        self.ast = parser.parse(self.code, filename=self.filename, 
+                                debuglevel=self.parse_dbg_lvl)
         if self.ast is None:
             logging.error("Parsing failed ...")
             raise RuntimeError("Parsing failed ...")
@@ -162,10 +165,11 @@ def main():
 
     usage = 'Usage: %prog [options]'
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--input', metavar="FILE", help='Input file, default is stdin', 
+    parser.add_argument('-i', '--input', metavar="FILE", 
+                        help='Input file, default is stdin', 
                         nargs=1, default="") 
     parser.add_argument('-o', '--output', metavar="FILE", 
-                        help='Output file, default is stdout. Appends .h and .c to given name', 
+                        help='Output(default stdout). Appends .h & .c to given name', 
                         nargs=1, default=None)
     parser.add_argument('-p', '--preprocess', help='Run the preprocessor first.', 
                         action='store_true')
@@ -190,7 +194,7 @@ def main():
         if args.preprocess:
             logging.debug("Preprocessing file %s" % args.input)
             logging.error("Preprocessing files not fully supported yet, if you need it modify \
-            jsoncc.py to have correct -I, see commented out call to preprocess_file function in jsoncc.py:467")
+            jsoncc.py to have correct -I, see commented out call to preprocess_file function in jsoncc.py:196")
             # code = preprocess_file(args.input, cpp_path="mcpp", 
             #                        cpp_args =['-@std', '-C','-P','-DGCLX_NATIVE',
             #                                   '-I utils/fake_libc_include/',

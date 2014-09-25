@@ -2,7 +2,7 @@
 # jsoncc: __init__.py
 #
 # Copyright (C) 2014, wvi
-# License: BSD
+# License: GPLv3
 #-----------------------------------------------------------------
 
 __all__ =['jsoncc']

@@ -1,3 +1,12 @@
+#-----------------------------------------------------------------
+# jsoncc: buildgen.py
+#
+# jsoncc generator pickling for faster run.
+# Work in progress, really just a internal development tool
+#  
+# Copyright (C) 2014, wvi
+# License: GPLv3
+#-----------------------------------------------------------------
 from jsngen import JsonCCGen
 import cPickle as pickle
 
