@@ -20,7 +20,7 @@ strdup = "char * jsn_strdup(const char *s, size_t len){ char *dst = (char *) cal
 
 file_h_prelude = 'typedef enum jsn_error_e { JSN_OK = 0, JSN_EPARSE, JSN_ENOTFOUND, JSN_EINVAL, JSN_EMEM } jsn_error_t;\n\n'
 
-get_str = "jsn_error_t get_str(const struct json_token *tok, char **val){ if (tok->type == JSON_TYPE_STRING || tok->type == JSON_TYPE_OBJECT) { *val = jsn_strdup(tok->ptr, tok->len); return JSN_OK; } return JSN_EINVAL;}"
+get_str = "jsn_error_t get_str(const struct json_token *tok, char **val){ if (tok->type == JSON_TYPE_STRING || tok->type == JSON_TYPE_OBJECT) { *val = jsn_strdup(tok->ptr, tok->len); return JSN_OK; } if (tok->type == JSON_TYPE_NULL) { *val = NULL; return JSN_OK;} return JSN_EINVAL;}"
 
 get_double = 'jsn_error_t get_double(const struct json_token *tok, double *val){ if (tok->type == JSON_TYPE_NUMBER) { sscanf(tok->ptr, "%lf", val); return JSN_OK; } return JSN_EINVAL; }'
 
