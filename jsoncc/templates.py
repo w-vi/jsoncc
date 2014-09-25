@@ -46,9 +46,10 @@ get_str_array = "jsn_error_t get_str_array(const struct json_token *toks, int in
     } \
 end: \
     if (status) { \
+        ptr = *val;
         for(char *p = *ptr; p != NULL; p = *(++ptr)) \
             free(p); \
-        free(ptr); \
+        free(*val); \
         *val = NULL; \
     } \
     return status; \
