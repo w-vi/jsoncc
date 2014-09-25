@@ -36,7 +36,7 @@ get_str_array = "jsn_error_t get_str_array(const struct json_token *toks, int in
         ptr = (char **)calloc(tok->num_desc + 1, sizeof(char *)); \
         if (!ptr) return JSN_EMEM;\
         *val = ptr; \
-        for (int i = index; i < index + tok->num_desc; ++i) \
+        for (int i = index; i < index + tok->num_desc; i += toks[i+1].num_desc+1) \
         { \
             if(JSN_OK != (status = get_str(&toks[i + 1], ptr))) goto end; \
             ++ptr; \
