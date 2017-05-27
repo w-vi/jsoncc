@@ -3,6 +3,7 @@
 #include <string.h>
 #include <curl/curl.h>
 #include "jsonio.h"
+#include <assert.h>
 
 typedef struct
 {
@@ -23,7 +24,6 @@ int
 pos_buf_realloc(pos_buf_t *buf, size_t len)
 {
     char *base = NULL;
-
     if (!(base = (char *)realloc(buf->base, len))) goto error;
 
     buf->base = base;
@@ -31,7 +31,7 @@ pos_buf_realloc(pos_buf_t *buf, size_t len)
     return 0;
 
 error:
-    free(base);
+    if (base) free(base);
     return -1;
 }
 
@@ -44,6 +44,8 @@ write_cb(void *data, size_t size, size_t nmemb, void *userp)
         if (pos_buf_realloc(&ctx->rcv_buf, ctx->rcv_buf.len + realsize)) {
             fprintf(stderr, "Memory error\n");
             exit(EXIT_FAILURE);
+
+
         }
     }
     memcpy(&ctx->rcv_buf.base[ctx->rcv_buf.pos], data, realsize);
@@ -72,6 +74,10 @@ main(int argc, char *argv[])
     }
 
     memset(&ctx, 0, sizeof(CTX));
+    if (! (ctx.rcv_buf.base = (char *)malloc(4096))) {
+        fprintf(stderr, "Memory error\n");
+        exit(EXIT_FAILURE);
+    }
     
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
@@ -150,6 +156,7 @@ main(int argc, char *argv[])
             printf("file.repo: %s\n", s.repo);
             jsn_free_search_item(&s);
         }    
+        printf("Call the search.\n");
 
         jsn_free_search_extension_res(&ctx.search);
         printf("(%lu bytes retrieved)\n", (long)ctx.rcv_buf.pos);
